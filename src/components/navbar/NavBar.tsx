@@ -5,7 +5,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const NavBar = () => {
+type NavBarProps = {
+    onLoginClick?: () => void;
+}
+
+const NavBar = ({ onLoginClick }: NavBarProps) => {
     const navRef = useRef<HTMLDivElement | null>(null);
     const lastScroll = useRef<number>(0);
     const tlRef = useRef<gsap.core.Tween | null>(null);
@@ -133,7 +137,7 @@ const NavBar = () => {
                             <a href="#" className="hover:text-gray-600 transition-colors"><li>Safety</li></a>
                         </ul>
                     </div>
-                    <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4">
                         <div className="lg:hidden">
                             <button
                                 onClick={() => setIsMenuOpen(true)}
@@ -156,9 +160,12 @@ const NavBar = () => {
                                 </svg>
                             </button>
                         </div>
-                        <button className="bg-black rounded-2xl p-3 cursor-pointer text-white hidden lg:block">
-                            <i className="fa-solid fa-download"></i> Download App
-                        </button>
+                        <div className="hidden lg:flex items-center gap-3">
+                            <button onClick={() => onLoginClick?.()} className="text-black bg-white/60 rounded-lg px-3 py-2">Login</button>
+                            <button className="bg-black rounded-2xl p-3 cursor-pointer text-white">
+                                <i className="fa-solid fa-download"></i> Download App
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

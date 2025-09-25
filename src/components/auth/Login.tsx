@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-const Login = () => {
+type LoginProps = {
+  onShowSignup?: () => void;
+}
+
+const Login = ({ onShowSignup }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -50,7 +54,7 @@ const Login = () => {
         </form>
 
         <div className="mt-4 text-center text-sm text-gray-600">
-          Don't have an account? <a href="#" className="text-blue-600 underline">Sign up</a>
+          Don't have an account? <button onClick={() => onShowSignup?.()} className="text-blue-600 underline">Sign up</button>
         </div>
       </div>
     </div>
