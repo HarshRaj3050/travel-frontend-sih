@@ -65,7 +65,7 @@ const Advanced = () => {
     return (
     <div className='w-full min-h-screen flex flex-col items-center justify-center text-black gap-10 mt-60 md:px-10 mb-50'>
             <div className="w-full flex flex-col items-center gap-6 px-2 md:px-8">
-                <h1 className="font-bold text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight">HexaTravel is probably India's most innovative and advanced mobile safety platform</h1>
+                <h1 className="font-bold text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight">Rahgir is probably India's most innovative and advanced mobile safety platform</h1>
                 <p className="text-center w-full sm:w-4/5 md:w-3/4 text-base sm:text-lg md:text-xl">A comprehensive platform for integration and branding, offering holistic emergency management solutions developed from real-life incidents and actual user needs.</p>
             </div>
 

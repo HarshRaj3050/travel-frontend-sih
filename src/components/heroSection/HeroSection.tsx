@@ -9,7 +9,7 @@ const HeroSection = () => {
           <h1 className="text-[2rem] xl:text-[4rem] lg:text-[3rem] leading-none mt-10">Smart Tourist Safety Monitoring & Incident Response</h1>
           <p className="mt-5 text-xs md:text-lg">Blockchain-backed Digital Tourist ID, AI safety scoring, geo-fencing alerts and instant panic response — made for safer travel across India.</p>
           <div className="pt-10 flex gap-10 sm:flex-row flex-col text-black">
-            <a href="#" className="bg-white px-8 py-3 rounded-2xl">Try HexaSafe - Demo</a>
+            <a href="#" className="bg-white px-8 py-3 rounded-2xl">Try Rahgir - Demo</a>
             <a href="#" className="bg-white px-8 py-3 rounded-2xl">View Features</a>
           </div>
         </div>

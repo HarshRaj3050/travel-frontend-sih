@@ -17,14 +17,12 @@ const NavBar = ({ onLoginClick }: NavBarProps) => {
     const menuRef = useRef<HTMLDivElement>(null);
     const menuTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
-    // Handle menu animations
+   
     useEffect(() => {
         if (!menuRef.current) return;
 
-        // Cleanup previous timeline
         menuTimelineRef.current?.kill();
 
-        // Lock/unlock body scroll
         document.body.style.overflow = isMenuOpen ? 'hidden' : '';
 
         const menu = menuRef.current;
@@ -33,9 +31,9 @@ const NavBar = ({ onLoginClick }: NavBarProps) => {
         });
 
         if (isMenuOpen) {
-            // Show animation from right to left
+
             gsap.set(menu, { display: 'flex' });
-            gsap.set('.menu-backdrop', { xPercent: 100 });  // Start from right
+            gsap.set('.menu-backdrop', { xPercent: 100 });  
             timeline
                 .fromTo(menu, 
                     { opacity: 0 },
@@ -52,7 +50,7 @@ const NavBar = ({ onLoginClick }: NavBarProps) => {
                     "-=0.3"
                 );
         } else {
-                // Hide animation left-to-right (back to button)
+                
                 const navButton = document.querySelector('.navbar-menu-btn');
                 if (navButton) {
                     timeline

@@ -7,6 +7,7 @@ import Download from "./components/down/Download";
 import { useState } from "react";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
+import Footer from "./components/footer/Footer"
 
 
 
@@ -38,6 +39,7 @@ const App = () => {
         className="custom-scroll-text"/>
   <Advanced></Advanced>
       <Download></Download>
+      <Footer></Footer>
     </div>
   )
 }

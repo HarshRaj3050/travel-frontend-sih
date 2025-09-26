@@ -4,7 +4,7 @@ import backgroundImg from "../../../public/assets/downloadImg.png"
 const Download = () => {
   return (
     <>
-    <div className='w-screen h-[90vh] bg-blue-300 relative mb-100'>
+    <div className='w-screen h-[90vh] bg-blue-300 relative mb-0'>
       <img 
         src={backgroundImg} 
         alt="Background" 
