@@ -161,8 +161,8 @@ const NavBar = ({ onLoginClick }: NavBarProps) => {
                             </button>
                         </div>
                         <div className="hidden lg:flex items-center gap-3">
-                            <button onClick={() => onLoginClick?.()} className="text-black bg-white/60 rounded-lg px-3 py-2">Login</button>
-                            <button className="bg-black rounded-2xl p-3 cursor-pointer text-white">
+                            <button onClick={() => onLoginClick?.()} className="text-white bg-black text-base rounded-full px-5 py-2">Login</button>
+                            <button className="bg-black rounded-full px-3 py-2 text-base cursor-pointer text-white">
                                 <i className="fa-solid fa-download"></i> Download App
                             </button>
                         </div>

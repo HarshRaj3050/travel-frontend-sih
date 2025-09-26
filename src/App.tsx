@@ -21,8 +21,7 @@ const App = () => {
   if (showLogin || showSignup) {
     return (
       <>
-        <NavBar onLoginClick={() => { setShowLogin(false); setShowSignup(false); }} />
-        {showLogin && <Login onShowSignup={() => { setShowLogin(false); setShowSignup(true); }} />}
+        {showLogin && <Login onShowSignup={() => { setShowLogin(false); setShowSignup(true); }} onBackToHome={() => { setShowLogin(false); setShowSignup(false); }} />}
         {showSignup && <Signup onShowLogin={() => { setShowSignup(false); setShowLogin(true); }} />}
       </>
     );
