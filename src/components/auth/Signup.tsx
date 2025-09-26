@@ -1,10 +1,356 @@
 import { useState } from "react";
+import { ethers } from "ethers";
 
 type SignupProps = {
   onShowLogin?: () => void;
 }
 
+const contract_address = "0x3d192aAcEd1D8ca62CC0409be96139Bf4F6Dc8Ea";
+const contract_abi = [
+	{
+		"inputs": [],
+		"name": "activate_user",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_data",
+				"type": "string"
+			}
+		],
+		"name": "add_fir",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_destination",
+				"type": "string"
+			}
+		],
+		"name": "add_travel_logs",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_adharID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_travelldestination",
+				"type": "string"
+			}
+		],
+		"name": "createUser",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "deactivate_user",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "data",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"name": "fir_added",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "_dest",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_time",
+				"type": "uint256"
+			}
+		],
+		"name": "travel_log_added",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "uniqueID",
+				"type": "bytes32"
+			}
+		],
+		"name": "user_activated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "adharID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "uniqueID",
+				"type": "bytes32"
+			}
+		],
+		"name": "user_created",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "uniqueID",
+				"type": "bytes32"
+			}
+		],
+		"name": "user_deactivated",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "firs",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "userId",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "string",
+				"name": "data",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "get_fir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "bytes32",
+						"name": "userId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "string",
+						"name": "data",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct SIH_PROJECT.FIR",
+				"name": "fir",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "get_user_travel_logs",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "_place",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_time",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct SIH_PROJECT.TRAVEL_LOG[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "police",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "user_exist",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "users",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "adharID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "uniqueID",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+
 const Signup = ({ onShowLogin }: SignupProps) => {
+  const [string, setString] = useState(null);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -15,6 +361,46 @@ const Signup = ({ onShowLogin }: SignupProps) => {
     confirm: ""
   });
   const [error, setError] = useState("");
+
+  const [account, setAccount] = useState("");
+  const [provider, setProvider] = useState("");
+
+const connectWallet = async () => {
+  try {
+    if (!(window as any).ethereum) {
+      alert("MetaMask is not installed. Please install it to continue.");
+      return;
+    }
+
+    const provider = new ethers.BrowserProvider((window as any).ethereum);
+    // const provider2 = new ethers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
+    
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(contract_address, contract_abi, signer);
+
+    // Request account access
+    
+    const accounts = await (window as any).ethereum.request({
+      method: "eth_requestAccounts",
+    });
+
+    const chainId = await (window as any).ethereum.request({
+      method: "eth_chainId",
+    });
+    const chainNumber = parseInt(chainId, 16);
+
+    const hashedString = await contract.createUser(parseInt(form.aadhaar), "Lovely professional university");
+    setString(hashedString);
+    console.log("This is the string ",hashedString);
+
+    // Save first account to state
+    setProvider(provider as any);
+    setAccount(accounts[0]);
+  } catch (error) {
+    console.error("Error connecting wallet:", error);
+  }
+};
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -49,6 +435,7 @@ const Signup = ({ onShowLogin }: SignupProps) => {
     e.preventDefault();
     if (!validate()) return;
     console.log("Signup data", form);
+    connectWallet();
     // TODO: call signup API
   };
 
