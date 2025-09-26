@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { ethers } from "ethers";
+import axios from 'axios';
 
 type SignupProps = {
   onShowLogin?: () => void;
 }
 
-const contract_address = "0x3d192aAcEd1D8ca62CC0409be96139Bf4F6Dc8Ea";
+const contract_address = "0xCB562b802c66f44f30A59Bf60e4748350bd4300c";
 const contract_abi = [
 	{
 		"inputs": [],
@@ -350,7 +351,6 @@ const contract_abi = [
 ];
 
 const Signup = ({ onShowLogin }: SignupProps) => {
-  const [string, setString] = useState(null);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -358,12 +358,14 @@ const Signup = ({ onShowLogin }: SignupProps) => {
     age: "",
     gender: "",
     password: "",
-    confirm: ""
+    confirm: "",
+    hashedString: ""
   });
   const [error, setError] = useState("");
 
   const [account, setAccount] = useState("");
   const [provider, setProvider] = useState("");
+  const [string, setString] = useState(null);
 
 const connectWallet = async () => {
   try {
@@ -376,7 +378,7 @@ const connectWallet = async () => {
     // const provider2 = new ethers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
     
     const signer = await provider.getSigner();
-    const contract = new ethers.Contract(contract_address, contract_abi, signer);
+    const contract = await new ethers.Contract(contract_address, contract_abi, signer);
 
     // Request account access
     
@@ -390,7 +392,7 @@ const connectWallet = async () => {
     const chainNumber = parseInt(chainId, 16);
 
     const hashedString = await contract.createUser(parseInt(form.aadhaar), "Lovely professional university");
-    setString(hashedString);
+    form.hashedString = hashedString.data;
     console.log("This is the string ",hashedString);
 
     // Save first account to state
@@ -431,12 +433,20 @@ const connectWallet = async () => {
     return true;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     console.log("Signup data", form);
-    connectWallet();
+    await connectWallet();
     // TODO: call signup API
+    console.log(form);
+    const response = await axios.post("http://localhost:3000/api/signup", {
+      ...form 
+    });
+
+    if(response.status === 201){
+      console.log("User created!")
+    };
   };
 
   return (
